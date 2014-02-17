@@ -5,7 +5,11 @@ import scala.Function2
 object Curry extends App {
 
   def curry[A,B,C](f: (A, B) => C): A => (B => C) = {
-    f.curried
+    new Function1[A, Function1[B, C]] {
+      def apply(a: A): Function1[B, C] = new Function1[B, C] {
+        def apply(b: B): C = ???
+       }
+    }
   }
   
   def sum(a: Int, b: Int): Int = a + b
@@ -15,4 +19,5 @@ object Curry extends App {
   val b = g(7)  
   
   println(s"$b should be 5 + 7")
+  
 }
