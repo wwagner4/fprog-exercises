@@ -5,7 +5,7 @@ import org.scalatest.FeatureSpec
 
 class Compose extends FeatureSpec with GivenWhenThen {
 
-  def compose[A, B, C](f: B => C, g: A => B): A => C = ???
+  def compose[A, B, C](f: B => C, g: A => B): A => C = (a: A) => f(g(a))
 
   feature("Concatenate") {
     scenario("Concatenate simple math functions") {
@@ -15,7 +15,7 @@ class Compose extends FeatureSpec with GivenWhenThen {
       def mul10(a: Int): Int = a * 10
 
       When("composing add5 and mul10")
-      val f = compose(add5, mul10)
+      val f = compose(mul10, add5)
 
       Then("f(5) should result in 100")
       assert(f(5) === 100)
