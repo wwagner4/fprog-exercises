@@ -6,9 +6,7 @@ object Curry extends App {
 
   def curry[A,B,C](f: (A, B) => C): A => (B => C) = {
     new Function1[A, Function1[B, C]] {
-      def apply(a: A): Function1[B, C] = new Function1[B, C] {
-        def apply(b: B): C = ???
-       }
+      def apply(a: A): Function1[B, C] = f(a, _)
     }
   }
   
