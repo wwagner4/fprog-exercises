@@ -1,5 +1,7 @@
 package ex2
 
+import scala.annotation.tailrec
+
 object Sorted extends App {
 
   val l1 = List(1, 2, 3, 4, 5)
@@ -17,15 +19,14 @@ object Sorted extends App {
   def compString(a: String, b: String): Boolean = a < b
   def compInt(a: Int, b: Int): Boolean = a < b
 
+  @tailrec
   def isSorted[T](l: List[T], f: (T, T) => Boolean): Boolean = {
     l match {
       case Nil => true
       case a :: Nil => true
       case a :: b :: rest => {
-        val re = if (f(a, b)) isSorted(b :: rest, f)
+        if (f(a, b)) isSorted(b :: rest, f)
         else false
-        //println(s"a b $a $b -> $re")
-        re
       }
     }
   }

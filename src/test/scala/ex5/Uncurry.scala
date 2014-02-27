@@ -29,7 +29,7 @@ class Uncurry extends FunSuite {
       }
   }
 
-  def uncurry2[A, B, C](f: A => (B => C)): (A, B) => C = (a: A, b: B) => f(a)(b)
+  def uncurry2[A, B, C](f: A => (B => C)): (A, B) => C = (a, b) => f(a)(b)
 
   def sum(a: Int, b: Int): Int = a + b
 

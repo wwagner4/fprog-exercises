@@ -6,16 +6,27 @@ class Partial1 extends FunSuite {
 
   def partial1[A, B, C](a: A, f: (A, B) => C): B => C = f(a, _)
 
-  def f5 = partial1(5, sum)
   def f6 = partial1(6, sum)
+  def f5 = partial1(5, sum)
 
   def sum(a: Int, b: Int): Int = a + b
   def add5(a: Int): Int = f5(a)
   def add6(a: Int): Int = partial1(6, sum)(a)
 
   test("performance") {
+    performance("f6", f6)
     performance("f5", f5)
     performance("f6", f6)
+    performance("f5", f5)
+    performance("f6", f6)
+    performance("f5", f5)
+    performance("f6", f6)
+    performance("add5", add5)
+    performance("add6", add6)
+    performance("add5", add5)
+    performance("add6", add6)
+    performance("add5", add5)
+    performance("add6", add6)
     performance("add5", add5)
     performance("add6", add6)
   }
