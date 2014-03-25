@@ -23,4 +23,9 @@ class VariadicSuite extends FunSuite {
     f1("B", l: _*)
   }
 
+  test("From Seq of Seq") {
+    val l = Seq(Seq(1), Seq(3, 4))
+    l.foreach (f1("C", _: _*))
+  }
+
 }
