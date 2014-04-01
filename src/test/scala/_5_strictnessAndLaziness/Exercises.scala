@@ -34,7 +34,20 @@ class Exercises extends FunSuite {
       if (isEmpty) Stream.empty
       else tl(n, this)
     }
-    def takeWhile(f: Int => Boolean): Stream[A] = ???
+    def takeWhile(f: A => Boolean): Stream[A] = {
+      def tl(uc: Stream[A]): Stream[A] = {
+        if (uc.isEmpty) Stream.empty
+        else uc.uncons match {
+          case None => Stream.empty
+          case Some(c) => {
+            if (f(c.head)) Stream.cons(c.head, tl(c.tail))
+            else Stream.empty
+          }
+        }
+      }
+      if (isEmpty) Stream.empty
+      else tl(this)
+    }
   }
   object Stream {
 
@@ -113,7 +126,7 @@ class Exercises extends FunSuite {
     }
     {
       val s: Stream[Int] = cons(1, cons(2, cons(3, empty)))
-      val l = s.takeWhile((i: Int) => i % 2 == 0).toList
+      val l = s.takeWhile((i: Int) => i % 2 != 0).toList
       assert(List(1) === l)
     }
     {
