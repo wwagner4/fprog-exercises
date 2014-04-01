@@ -34,6 +34,7 @@ class Exercises extends FunSuite {
       if (isEmpty) Stream.empty
       else tl(n, this)
     }
+    def takeWhile(f: Int => Boolean): Stream[A] = ???
   }
   object Stream {
 
@@ -101,6 +102,34 @@ class Exercises extends FunSuite {
       val l = s.take(-100).toList
       assert(Nil === l)
     }
+  }
+  
+  test("Exercise 3 takeWhile") {
+    import Stream._
+    {
+      val s: Stream[Int] = cons(1, cons(2, cons(3, empty)))
+      val l = s.takeWhile((i: Int) => i < 3).toList
+      assert(List(1, 2) === l)
+    }
+    {
+      val s: Stream[Int] = cons(1, cons(2, cons(3, empty)))
+      val l = s.takeWhile((i: Int) => i % 2 == 0).toList
+      assert(List(1) === l)
+    }
+    {
+      val s: Stream[Int] = cons(1, cons(2, cons(3, empty)))
+      val l = s.takeWhile((i: Int) => false).toList
+      assert(Nil === l)
+    }
+    {
+      val s: Stream[Int] = cons(1, cons(2, cons(3, empty)))
+      val l = s.takeWhile((i: Int) => true).toList
+      assert(List(1, 2, 3) === l)
+    }
+    
+    
+    
+    
   }
 
 }
