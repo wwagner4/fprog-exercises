@@ -1,8 +1,19 @@
 package _5_strictnessAndLaziness
 
 import org.scalatest.FunSuite
+import org.scalatest.Matchers._
 
 class Exercises extends FunSuite {
+
+  // Chattering operators 
+  implicit class TestInt(i: Int) {
+    def /#(b: Int) = { println(s"# $i/$b"); i / b }
+    def +#(b: Int) = { println(s"# $i+$b"); i + b }
+  }
+  implicit class TestDouble(i: Double) {
+    def /#(b: Double) = { println(s"# $i/$b"); i / b }
+    def +#(b: Double) = { println(s"# $i+$b"); i + b }
+  }
 
   case class Cons[+A](head: A, tail: Stream[A])
 
@@ -65,6 +76,12 @@ class Exercises extends FunSuite {
       if (isEmpty) true
       else _forAll(this)
     }
+
+    def foldRight[B](z: => B)(f: (A, => B) => B): B =
+      uncons match {
+        case Some(Cons(head, tail)) => f(head, tail.foldRight(z)(f))
+        case None => z
+      }
   }
   object Stream {
 
@@ -90,17 +107,17 @@ class Exercises extends FunSuite {
     {
       val s: Stream[Int] = cons(1, cons(2, cons(3, empty)))
       val l = s.toList
-      assert(List(1, 2, 3) === l)
+      l should be (List(1, 2, 3))
     }
     {
       val s: Stream[Int] = cons(3, empty)
       val l = s.toList
-      assert(List(3) === l)
+      l should be (List(3))
     }
     {
       val s: Stream[Int] = empty
       val l = s.toList
-      assert(Nil === l)
+      l should be (Nil)
     }
   }
 
@@ -110,27 +127,27 @@ class Exercises extends FunSuite {
     {
       val s: Stream[Int] = cons(1, cons(2, cons(3, empty)))
       val l = s.take(1).toList
-      assert(List(1) === l)
+      l should be (List(1))
     }
     {
       val s: Stream[Int] = cons(1, cons(2, cons(3, empty)))
       val l = s.take(5).toList
-      assert(List(1, 2, 3) === l)
+      l should be (List(1, 2, 3))
     }
     {
       val s: Stream[Int] = cons(1, cons(2, cons(3, empty)))
       val l = s.take(0).toList
-      assert(Nil === l)
+      l should be (Nil)
     }
     {
       val s: Stream[Int] = cons(1, cons(2, cons(3, empty)))
       val l = s.take(-1).toList
-      assert(Nil === l)
+      l should be (Nil)
     }
     {
       val s: Stream[Int] = cons(1, cons(2, cons(3, empty)))
       val l = s.take(-100).toList
-      assert(Nil === l)
+      l should be (Nil)
     }
   }
 
@@ -139,22 +156,22 @@ class Exercises extends FunSuite {
     {
       val s: Stream[Int] = cons(1, cons(2, cons(3, empty)))
       val l = s.takeWhile((i: Int) => i < 3).toList
-      assert(List(1, 2) === l)
+      l should be (List(1, 2))
     }
     {
       val s: Stream[Int] = cons(1, cons(2, cons(3, empty)))
       val l = s.takeWhile((i: Int) => i % 2 != 0).toList
-      assert(List(1) === l)
+      l should be (List(1))
     }
     {
       val s: Stream[Int] = cons(1, cons(2, cons(3, empty)))
       val l = s.takeWhile((i: Int) => false).toList
-      assert(Nil === l)
+      l should be(Nil)
     }
     {
       val s: Stream[Int] = cons(1, cons(2, cons(3, empty)))
       val l = s.takeWhile((i: Int) => true).toList
-      assert(List(1, 2, 3) === l)
+      l should be(List(1, 2, 3))
     }
   }
 
@@ -166,28 +183,54 @@ class Exercises extends FunSuite {
     {
       val s: Stream[Int] = cons(1, cons(2, cons(3, empty)))
       val re = s.forAll((i: Int) => i > 0)
-      assert(true === re)
+      re should be(true)
     }
     {
       val s: Stream[Int] = empty
       val re = s.forAll((i: Int) => true)
-      assert(true === re)
+      re should be(true)
     }
     {
       val s: Stream[Int] = empty
       val re = s.forAll((i: Int) => false)
-      assert(true === re)
+      re should be(true)
     }
     {
       val s: Stream[Int] = cons(1, cons(2, cons(3, empty)))
       val re = s.forAll((i: Int) => i > 1)
-      assert(false === re)
+      re should be(false)
     }
     {
       val s: Stream[Int] = cons(1, cons(2, cons(3, empty)))
       val re = s.forAll((i: Int) => true)
-      assert(true === re)
+      re should be(true)
     }
   }
 
+  test("foldRight") {
+    import Stream._
+    {
+      val s: Stream[Int] = cons(1, cons(2, cons(3, empty)))
+      val re = s.foldRight(0)((a, b) => a + b)
+      re should be(6)
+    }
+    {
+      val s: Stream[Int] = cons(1, cons(2, cons(3, empty)))
+      val re = s.foldRight(0)(_ +# _)
+      re should be(6)
+    }
+    {
+      val s: Stream[Double] = cons(2.0, cons(3.0, empty))
+      val re = s.foldRight(1.0)((a, b) => b / a)
+      re should be(0.166666 +- 0.01)
+    }
+  }
+  test("Exercise 5 forAll") {
+    import Stream._
+    {
+      val s: Stream[Int] = cons(1, cons(2, cons(3, empty)))
+      val re = s.forAll((i: Int) => i > 0)
+      assert(true === re)
+    }
+  }
 }
