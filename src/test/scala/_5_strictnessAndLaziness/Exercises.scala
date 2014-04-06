@@ -5,7 +5,7 @@ import org.scalatest.Matchers._
 
 import fprog._
 
-class Exercises extends FunSuite {
+class Exercises_5 extends FunSuite {
   import Stream._
 
   // Chattering operators 
