@@ -26,6 +26,10 @@ class Exercises_6 extends FunSuite {
     println(v2)
   }
 
+  // EXERCISE 1: Write a function to generate a random positive integer. Note:
+  // you can use x.abs to take the absolute value of an Int, x. Make sure to handle
+  // the corner case Int.MinValue, which doesn't have a positive counterpart.
+
   def posInt(rng: RNG): (Int, RNG) = {
     val r1 = rng.nextInt
     val r = r1._1 match {
@@ -45,6 +49,10 @@ class Exercises_6 extends FunSuite {
     })
   }
   
+  
+  // EXERCISE 2: Write a function to generate a Double between 0 and 1, not
+  // including 1. Note: you can use Int.MaxValue to obtain the maximum positive
+  // integer value and you can use x.toDouble to convert an Int, x, to a Double.
   def double(rng: RNG): (Double, RNG) = {
     val r1 = rng.nextInt
     val r = r1._1 match {
@@ -64,6 +72,7 @@ class Exercises_6 extends FunSuite {
     })
   }
   
+  // EXERCISE 4: Write a function to generate a list of random integers
   def ints(cnt: Int)(rng: RNG): (List[Int], RNG) = {
     def _ints(c: Int, rng: RNG): (List[Int], RNG) = {
       if (c <= 0) (Nil, rng)
@@ -76,7 +85,7 @@ class Exercises_6 extends FunSuite {
     _ints(cnt, rng)
   }
   
-  test(s"Ex 3") {
+  test(s"Ex 4") {
     var rng1: RNG = RNG.simple(92387923L)
     (1 to 100) foreach (i => {
       val (v1, rng2) = ints(10)(rng1)
@@ -85,6 +94,9 @@ class Exercises_6 extends FunSuite {
       rng1 = rng2
     })
   }
+  
+  
+  
   
 }    
     
