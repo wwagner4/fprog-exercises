@@ -120,7 +120,8 @@ class Exercises_6 extends FunSuite {
   def positiveMax(n: Int): Rand[Int] = {
     val rng0 = RNG.simple(203498L)
     val rng1 = RNG.simple(203498L) 
-    rng1.int(rng0)(i: Int => i % n)
+    //rng1.int(rng0)(i: Int => i % n)
+    null // TODO Continue here
   }
   test(s"Ex 5") {
     val rng0 = RNG.simple(92387923L)
